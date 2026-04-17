@@ -183,6 +183,10 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
             `variables.${variableName} <= maxDownloadableSize`,
         )
         // eslint-disable-next-line no-useless-escape
+        .replace(/\#SizeLimit/g, () => `(totalSize <= maxDownloadableSize)`)
+        // eslint-disable-next-line no-useless-escape
+        .replace(/\#Selected/g, () => `(selectedCount > 0)`)
+        // eslint-disable-next-line no-useless-escape
         .replace(/\#datasetOwner/g, (_) => `datasetOwner`)
         // eslint-disable-next-line no-useless-escape
         .replace(/\#userIsAdmin/g, (_) => `isAdmin`)
@@ -260,6 +264,11 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
   }
 
   get context() {
+    const allFiles = this.actionItems.datasets.flatMap((d) => d.files ?? []);
+    const selectedFiles = allFiles.filter((f) => f.selected);
+    const relevantFiles =
+      this.actionConfig.files === "selected" ? selectedFiles : allFiles;
+
     return {
       variables: this.variables,
       maxDownloadableSize: this.configService.getConfig().maxDirectDownloadSize,
@@ -269,6 +278,8 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
         }) as Array<boolean>
       ).some(Boolean),
       isAdmin: this.isAdmin,
+      selectedCount: selectedFiles.length,
+      totalSize: relevantFiles.reduce((acc, f) => acc + Number(f.size), 0),
     };
   }
 
