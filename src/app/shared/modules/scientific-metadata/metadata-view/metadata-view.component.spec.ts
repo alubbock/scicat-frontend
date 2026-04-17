@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
 import { MetadataViewComponent } from "./metadata-view.component";
-import { NO_ERRORS_SCHEMA } from "@angular/core";
+import { NO_ERRORS_SCHEMA, SimpleChange } from "@angular/core";
 import { PipesModule } from "shared/pipes/pipes.module";
 import { MatTableModule } from "@angular/material/table";
 import { ReplaceUnderscorePipe } from "shared/pipes/replace-underscore.pipe";
@@ -52,6 +52,24 @@ describe("MetadataViewComponent", () => {
 
   it("should create", () => {
     expect(component).toBeTruthy();
+  });
+
+  describe("#ngOnChanges()", () => {
+    it("should not throw when metadata changes to undefined", () => {
+      expect(() =>
+        component.ngOnChanges({
+          metadata: new SimpleChange(undefined, undefined, false),
+        }),
+      ).not.toThrow();
+    });
+
+    it("should not throw when metadata changes to null", () => {
+      expect(() =>
+        component.ngOnChanges({
+          metadata: new SimpleChange(undefined, null, false),
+        }),
+      ).not.toThrow();
+    });
   });
 
   describe("#createMetadataArray()", () => {

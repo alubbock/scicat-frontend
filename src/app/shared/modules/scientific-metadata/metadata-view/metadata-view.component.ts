@@ -261,8 +261,10 @@ export class MetadataViewComponent implements OnInit, OnChanges {
     for (const propName in changes) {
       if (propName === "metadata") {
         this.metadata = changes[propName].currentValue;
-        this.tableData = this.createMetadataArray(this.metadata);
-        this.dataSource.next(this.tableData);
+        if (this.metadata) {
+          this.tableData = this.createMetadataArray(this.metadata);
+          this.dataSource.next(this.tableData);
+        }
       }
     }
   }
