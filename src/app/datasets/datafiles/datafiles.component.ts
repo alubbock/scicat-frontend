@@ -271,7 +271,9 @@ export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
           this.tableData = files.slice(0, this.pageSize);
           this.files = files;
           this.tooLargeFile = this.hasTooLargeFiles(this.files);
-          this.actionItems.datasets[0].files = files;
+          if (this.actionItems.datasets[0]) {
+            this.actionItems.datasets[0].files = files;
+          }
         }
       }),
     );

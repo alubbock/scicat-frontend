@@ -17,6 +17,7 @@ import { MatCheckboxChange } from "@angular/material/checkbox";
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
 import { AppConfigService } from "app-config.service";
+import { NEVER, of } from "rxjs";
 import { MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 import { ConfigurableActionsComponent } from "shared/modules/configurable-actions/configurable-actions.component";
 import { UsersService } from "@scicatproject/scicat-sdk-ts-angular";
@@ -321,6 +322,17 @@ describe("DatafilesComponent", () => {
       });
 
       expect(component.selectedFileSize).toEqual(0);
+    });
+  });
+
+  describe("#ngOnInit()", () => {
+    it("should not throw when datablocks arrive before dataset is set in actionItems", () => {
+      const mockDatablock = { dataFileList: [{ path: "/f", size: 1, selected: false, time: "" }] };
+      component.datablocks$ = of([mockDatablock] as any);
+      component.dataset$ = NEVER;
+      component.actionItems = { datasets: [] };
+
+      expect(() => component.ngOnInit()).not.toThrow();
     });
   });
 
