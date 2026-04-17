@@ -59,6 +59,9 @@ describe("1000: ConfigurableActionComponent", () => {
     publish = "9c6a11b6-a526-11f0-8795-6f025b320cc3",
     unpublish = "94a1d694-a526-11f0-947b-038d53cd837a",
     link = "c3bcbd40-a526-11f0-915a-93eeff0860ab",
+    size_limit_all = "t0000001-0000-0000-0000-000000000001",
+    selected_only = "t0000001-0000-0000-0000-000000000002",
+    selected_and_size_limit = "t0000001-0000-0000-0000-000000000003",
   }
 
   const usersControllerGetUserJWTV3 = () => ({
@@ -562,6 +565,114 @@ describe("1000: ConfigurableActionComponent", () => {
       published: undefined,
       result: true,
       user: 2,
+    },
+    // -------- #SizeLimit (files: "all") — total all-file size is 6000
+    {
+      test: "0710: #SizeLimit (all) should be disabled when total size exceeds limit",
+      action: "t0000001-0000-0000-0000-000000000001",
+      limit: maxSizeType.lower,
+      actionItems: mockActionItemsDatafilesNofiles,
+      result: false,
+    },
+    {
+      test: "0720: #SizeLimit (all) should be disabled regardless of selection when total size exceeds limit",
+      action: "t0000001-0000-0000-0000-000000000001",
+      limit: maxSizeType.lower,
+      actionItems: mockActionItemsDatafilesAllfiles,
+      result: false,
+    },
+    {
+      test: "0730: #SizeLimit (all) should be enabled when total size is within limit",
+      action: "t0000001-0000-0000-0000-000000000001",
+      limit: maxSizeType.higher,
+      actionItems: mockActionItemsDatafilesNofiles,
+      result: true,
+    },
+    {
+      test: "0740: #SizeLimit (all) should be enabled regardless of selection when total size is within limit",
+      action: "t0000001-0000-0000-0000-000000000001",
+      limit: maxSizeType.higher,
+      actionItems: mockActionItemsDatafilesAllfiles,
+      result: true,
+    },
+    // -------- #Selected (files: "selected")
+    {
+      test: "0810: #Selected should be disabled when no files are selected",
+      action: "t0000001-0000-0000-0000-000000000002",
+      limit: maxSizeType.lower,
+      actionItems: mockActionItemsDatafilesNofiles,
+      result: false,
+    },
+    {
+      test: "0820: #Selected should be enabled when file 1 is selected",
+      action: "t0000001-0000-0000-0000-000000000002",
+      limit: maxSizeType.lower,
+      actionItems: mockActionItemsDatafilesFile1,
+      result: true,
+    },
+    {
+      test: "0830: #Selected should be enabled when file 2 is selected",
+      action: "t0000001-0000-0000-0000-000000000002",
+      limit: maxSizeType.lower,
+      actionItems: mockActionItemsDatafilesFile2,
+      result: true,
+    },
+    {
+      test: "0840: #Selected should be enabled when all files are selected",
+      action: "t0000001-0000-0000-0000-000000000002",
+      limit: maxSizeType.lower,
+      actionItems: mockActionItemsDatafilesAllfiles,
+      result: true,
+    },
+    // -------- #Selected && #SizeLimit (files: "selected") — selected sizes: file1=1000, file2=2000, all=6000
+    {
+      test: "0910: #Selected && #SizeLimit should be disabled when no files are selected",
+      action: "t0000001-0000-0000-0000-000000000003",
+      limit: maxSizeType.lower,
+      actionItems: mockActionItemsDatafilesNofiles,
+      result: false,
+    },
+    {
+      test: "0920: #Selected && #SizeLimit should be enabled when file 1 selected and size within limit",
+      action: "t0000001-0000-0000-0000-000000000003",
+      limit: maxSizeType.lower,
+      actionItems: mockActionItemsDatafilesFile1,
+      result: true,
+    },
+    {
+      test: "0930: #Selected && #SizeLimit should be enabled when file 2 selected and size within limit",
+      action: "t0000001-0000-0000-0000-000000000003",
+      limit: maxSizeType.lower,
+      actionItems: mockActionItemsDatafilesFile2,
+      result: true,
+    },
+    {
+      test: "0940: #Selected && #SizeLimit should be disabled when all files selected and total size exceeds limit",
+      action: "t0000001-0000-0000-0000-000000000003",
+      limit: maxSizeType.lower,
+      actionItems: mockActionItemsDatafilesAllfiles,
+      result: false,
+    },
+    {
+      test: "0950: #Selected && #SizeLimit should be disabled when no files are selected even with high limit",
+      action: "t0000001-0000-0000-0000-000000000003",
+      limit: maxSizeType.higher,
+      actionItems: mockActionItemsDatafilesNofiles,
+      result: false,
+    },
+    {
+      test: "0960: #Selected && #SizeLimit should be enabled when file 1 selected and high limit",
+      action: "t0000001-0000-0000-0000-000000000003",
+      limit: maxSizeType.higher,
+      actionItems: mockActionItemsDatafilesFile1,
+      result: true,
+    },
+    {
+      test: "0970: #Selected && #SizeLimit should be enabled when all files selected and high limit",
+      action: "t0000001-0000-0000-0000-000000000003",
+      limit: maxSizeType.higher,
+      actionItems: mockActionItemsDatafilesAllfiles,
+      result: true,
     },
   ];
 

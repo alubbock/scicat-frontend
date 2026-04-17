@@ -221,6 +221,36 @@ export const mockActionsConfig: ActionConfig[] = [
       Authorization: "#tokenBearer",
     },
   },
+  {
+    id: "t0000001-0000-0000-0000-000000000001",
+    label: "Download All (#SizeLimit)",
+    files: "all",
+    type: "link",
+    url: "https://example.org",
+    target: "_blank",
+    authorization: [],
+    enabled: "#SizeLimit",
+  },
+  {
+    id: "t0000001-0000-0000-0000-000000000002",
+    label: "Download Selected (#Selected)",
+    files: "selected",
+    type: "link",
+    url: "https://example.org",
+    target: "_blank",
+    authorization: [],
+    enabled: "#Selected",
+  },
+  {
+    id: "t0000001-0000-0000-0000-000000000003",
+    label: "Download Selected (#Selected && #SizeLimit)",
+    files: "selected",
+    type: "link",
+    url: "https://example.org",
+    target: "_blank",
+    authorization: [],
+    enabled: "#Selected && #SizeLimit",
+  },
 ];
 
 export const mockActionItems: ActionItems = {
